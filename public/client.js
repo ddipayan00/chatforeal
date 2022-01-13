@@ -13,7 +13,7 @@ do {
 socket.on('connect',()=>{
      let msg={
         user: name,
-        message: `you are connected to :${socket.id}`
+        message: `you are connected to Global Server`
      }
      appendMessage(msg,'incoming');
 })
