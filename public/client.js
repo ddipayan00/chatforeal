@@ -1,5 +1,5 @@
 const socket = io()
-let name;
+let nam;
 let room;
 let textarea = document.querySelector('#textarea')
 let messageArea = document.querySelector('.message__area')
@@ -7,13 +7,13 @@ let newroom=document.getElementById("room");
 let newjoin=document.getElementById("join");
 let roombtn=document.getElementById("join1");
 do {
-    name = prompt('Please enter your name: ')
-} while(!name)
+    nam = prompt('Please enter your name: ')
+} while(!nam)
 
 socket.on('connect',()=>{
      let msg={
-        user: name,
-        message: `you are connected to Global Server`
+        user: nam,
+        message: `you are connected to the Global Server`
      }
      appendMessage(msg,'incoming');
 })
@@ -26,7 +26,7 @@ textarea.addEventListener('keyup', (e) => {
 
 function sendMessage(message) {
     let msg = {
-        user: name,
+        user: nam,
         message: message.trim()
     }
     // Append 
@@ -41,21 +41,22 @@ function sendMessage(message) {
 }
 
 function appendMessage(msg, type) {
-    let mainDiv = document.createElement('div')
-    let className = type
-    mainDiv.classList.add(className, 'message')
-
-    let markup = `
-        <h4>${msg.user}</h4>
-        <p>${msg.message}</p>
-    `
-    mainDiv.innerHTML = markup
-    messageArea.appendChild(mainDiv)
+    if(msg.message !== null){
+        let mainDiv = document.createElement('div')
+        let className = type
+        mainDiv.classList.add(className, 'message')
+        let markup = `
+            <h4>${msg.user}</h4>
+            <p>${msg.message}</p>
+        `
+        mainDiv.innerHTML = markup
+        messageArea.appendChild(mainDiv)
+    }
+    
 }
 
 // Recieve messages 
 socket.on('receive-message', (msg) => {
-    console.log(msg);
     appendMessage(msg, 'incoming')
     scrollToBottom()
 })
@@ -67,10 +68,10 @@ function scrollToBottom() {
 newjoin.addEventListener('click',()=>{
     //let msg=textarea.value;
     let msg = {
-        user: name,
+        user: nam,
         message: textarea.value
     }
-    room=newroom.value;
+    room = newroom.value;
     //console.log(msg);
 
     if(msg.message === null)
@@ -93,7 +94,7 @@ roombtn.addEventListener('click',()=>{
     room=newroom.value;
     socket.emit('join-room',room,message =>{
         let msg ={
-            user: name,
+            user: nam,
             message: message
         }
         appendMessage(msg,'incoming');
