@@ -31,7 +31,11 @@ io.on('connection', (socket) => {
     })
     socket.on('join-room',(room,cb)=>{
           socket.join(room);
-          cb(`you joined Global Room`)
+          if(room === null){
+            cb(`you joined global room`)
+          }else{
+            cb(`you joined ${room}`)
+          }
     })
 
 })
