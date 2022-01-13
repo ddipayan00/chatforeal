@@ -78,7 +78,8 @@ section.chat__section {
     background-color: rgb(80, 223, 135);
     color: black;
     border-radius: 7px;
-    margin-left: 5px;
+    margin-top: 3px;
+    margin-left: 15px;
 }
 #join1{
     position: absolute;
@@ -87,7 +88,7 @@ section.chat__section {
     background-color: rgb(80, 223, 135);
     color: black;
     border-radius: 7px;
-    margin-left: 5px;
+    margin-left: 15px;
 }
 #room{
     width: 100%;
