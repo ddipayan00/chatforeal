@@ -1,35 +1,47 @@
 const socket = io()
-let name;
+let nam;
 let room;
-let flag=0;
+let flag = false;
 let textarea = document.querySelector('#textarea')
 let messageArea = document.querySelector('.message__area')
-let newroom=document.getElementById("room");
-let newjoin=document.getElementById("join");
-let roombtn=document.getElementById("join1");
-let globalbtn=document.getElementById("join2");
+let newroom = document.getElementById("room");
+let newjoin = document.getElementById("join");
+let roombtn = document.getElementById("join1");
+let globalbtn = document.getElementById("join2");
+newjoin.style.display = "none";
+// Starting
 do {
-    name = prompt('Please enter your name: ')
-} while(!name)
+    nam = prompt('Please enter your name: ')
+} while(!nam)
 
 socket.on('connect',()=>{
      let msg={
-        user: name,
-        message: `you are connected to :${socket.id}`
+        user: nam,
+        message: `you are connected to the Global Server`
      }
      appendMessage(msg,'incoming');
 })
 
+
+// Enter
 // textarea.addEventListener('keyup', (e) => {
-//     if(e.key === 'Enter') {
-        
+//     if(e.key === 'Enter' && textarea.value != '') {
 //         sendMessage(e.target.value)
+//         console.log(textarea.value ,"lol")
 //     }
 // })
-
+newroom.addEventListener('change',()=>{
+    if(newroom.value === ''){
+        newjoin.style.display = "none";
+    }
+    else{
+        newjoin.style.display = "block"; 
+    }
+})
+// Send msg
 function sendMessage(message) {
     let msg = {
-        user: name,
+        user: nam,
         message: message.trim()
     }
     // Append 
@@ -44,22 +56,22 @@ function sendMessage(message) {
 }
 
 function appendMessage(msg, type) {
-    let mainDiv = document.createElement('div')
-    let className = type
+    if(msg.message !== null){
+        let mainDiv = document.createElement('div')
+        let className = type
+        mainDiv.classList.add(className, 'message')
+        let markup = `
+            <h4>${msg.user}</h4>
+            <p>${msg.message}</p>
+        `
+        mainDiv.innerHTML = markup
+        messageArea.appendChild(mainDiv)
+    }
     
-    mainDiv.classList.add(className, 'message')
-
-    let markup = `
-        <h4>${msg.user}</h4>
-        <p>${msg.message}</p>
-    `
-    mainDiv.innerHTML = markup
-    messageArea.appendChild(mainDiv)
 }
 
 // Recieve messages 
 socket.on('receive-message', (msg) => {
-    console.log(msg);
     appendMessage(msg, 'incoming')
     scrollToBottom()
 })
@@ -67,20 +79,17 @@ socket.on('receive-message', (msg) => {
 function scrollToBottom() {
     messageArea.scrollTop = messageArea.scrollHeight
 }
-
+// Send msg button
 newjoin.addEventListener('click',()=>{
-    //let msg=textarea.value;
     let msg = {
-        user: name,
+        user: nam,
         message: textarea.value
     }
-    room=newroom.value;
-    
+    room = newroom.value;
 
-    if(textarea.value === '')
+    if(msg.message === null)
     {
-        console.log("blank");
-       return ; 
+        return;
     }
     if(room === '')
     {
@@ -93,6 +102,7 @@ newjoin.addEventListener('click',()=>{
 
 
 })
+
 globalbtn.addEventListener('click', ()=>{
     let msg = {
         user: name,
@@ -108,23 +118,22 @@ globalbtn.addEventListener('click', ()=>{
 
     textarea.value="";
 })
-
+// Join room
 roombtn.addEventListener('click',()=>{
-    room=newroom.value;
+    room = newroom.value;
     socket.emit('join-room',room,message =>{
         let msg ={
-            user: name,
+            user: nam,
             message: message
         }
-        flag=1;
+        flag = true;
         appendMessage(msg,'incoming');
     });
 })
 
 newroom.addEventListener('change',()=>{
-     if(newroom.value === '' && flag==1)
-     {
-         socket.disconnect();
-         socket.connect();
-     }
+    if(newroom.value === '' && flag==true) {
+        socket.disconnect();
+        socket.connect();
+    }
 })
