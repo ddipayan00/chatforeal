@@ -20,19 +20,18 @@ const io = require('socket.io')(http)
 io.on('connection', (socket) => {
     socket.on('message', (msg,room) => {
         if(room === null) {
-            socket.broadcast.emit('receive-message', msg);
-            console.log("no room");
+            socket.broadcast.emit('receive-message', msg); // msg for all
         }
         else{
-            socket.to(room).emit('receive-message', msg);
+            socket.to(room).emit('receive-message', msg); // msg for room only
         }
     })
-    socket.on('join-room',(room,cb)=>{
+    socket.on('join-room',(room,ok)=>{
           socket.join(room);
           if(room === ''){
-            cb(`you joined global room`)
+            ok(`you joined global room`)
           }else{
-            cb(`you joined ${room}`)
+            ok(`you joined ${room}`)
           }  
     })
 })
