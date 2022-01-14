@@ -70,7 +70,7 @@ section.chat__section {
     color: #333;
     font-size: 14px;
 }
-#join{
+#join2{
     position: absolute;
     font-size: 20px;
     padding: 0 15px;
@@ -80,7 +80,7 @@ section.chat__section {
     margin-top: 3px;
     margin-left: 15px;
 }
-#join1{
+#join1,#join{
     position: absolute;
     font-size: 20px;
     padding: 0 15px;
