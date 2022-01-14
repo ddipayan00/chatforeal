@@ -26,12 +26,12 @@ io.on('connection', (socket) => {
             socket.to(room).emit('receive-message', msg); // msg for room only
         }
     })
-    socket.on('join-room',(room,ok)=>{
+    socket.on('join-room',(room,cb)=>{
           socket.join(room);
           if(room === ''){
-            ok(`you joined global room`)
+            cb(`you joined global room`)
           }else{
-            ok(`you joined ${room}`)
+            cb(`you joined ${room}`)
           }  
     })
 })
