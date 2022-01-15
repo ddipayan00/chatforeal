@@ -79,6 +79,7 @@ socket.on('receive-message', (msg) => {
 function scrollToBottom() {
     messageArea.scrollTop = messageArea.scrollHeight
 }
+
 // Send msg button
 newjoin.addEventListener('click',()=>{
     let msg = {
@@ -96,6 +97,7 @@ newjoin.addEventListener('click',()=>{
         room=null;
     }
     appendMessage(msg,'outgoing');
+    scrollToBottom();
     socket.emit('message',msg,room);
 
     textarea.value="";
@@ -103,21 +105,21 @@ newjoin.addEventListener('click',()=>{
 
 })
 
+//global button
+
 globalbtn.addEventListener('click', ()=>{
     let msg = {
-        user: name,
+        user: nam,
         message: textarea.value
     }
     if(msg.message === '')
     {
         return;
     }
-    appendMessage(msg,'outgoing');
-    scrollToBottom();
-    socket.emit('message',msg,null);
-
-    textarea.value="";
+    sendMessage(msg.message);
+    
 })
+
 // Join room
 roombtn.addEventListener('click',()=>{
     room = newroom.value;
@@ -128,6 +130,7 @@ roombtn.addEventListener('click',()=>{
         }
         flag = true;
         appendMessage(msg,'incoming');
+        scrollToBottom();
     });
 })
 
